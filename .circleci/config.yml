@@ -42,7 +42,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths:
-            - '*/build/*'
+            - 'build/*'
       - jira/notify
   gradle-publish-api:
     docker:
