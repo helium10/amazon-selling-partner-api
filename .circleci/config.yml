@@ -104,5 +104,5 @@ workflows:
             - ci-h10-pzn-maven-read
           name: Gradle Publish API
           requires:
-            - Maven Publish Helper API
+#            - Maven Publish Helper API
             - Gradle Build and Test
