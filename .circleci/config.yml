@@ -29,7 +29,7 @@ jobs:
           steps:
             - run:
                 command: mvn clean deploy -Dversion=1.0 -DMETAMUSE_MAVEN_PUBLISH_SECRET_KEY=$ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY -DMETAMUSE_MAVEN_PUBLISH_ACCESS_KEY=ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY
-                working_directory: $CIRCLE_WORKING_DIRECTORY/clients/sellingpartner-api-aa-java
+                working_directory: clients/sellingpartner-api-aa-java
   gradle-build-test:
     docker:
       - image: cimg/openjdk:11.0
