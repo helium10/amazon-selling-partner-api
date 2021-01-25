@@ -12,6 +12,7 @@ manually-deploy-branch-filter: &manually-deploy-filter
 orbs:
   jira: circleci/jira@1.3.0
   gradle: circleci/gradle@2.2.0
+  maven: circleci/maven@1.1.0
   h10-common-build: helium10/h10-common-build@0.0.24
   h10-ecr-build: helium10/h10-ecr-build@0.1.18
   h10-slack: helium10/h10-slack@0.1.18
@@ -71,9 +72,23 @@ jobs:
           root: ./
           paths:
             - 'build/*'
+  maven-publish:
+    executor:
+      name: maven/default
+    name: "Publish Maven Libraries"
+    steps:
+      - checkout
+      - maven/with_cache:
+          steps:
+            - run: mvn --settings settings.xml clean deploy -Dversion=1.0 -DMETAMUSE_MAVEN_PUBLISH_SECRET_KEY=$ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY -DMETAMUSE_MAVEN_PUBLISH_ACCESS_KEY=ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY
 workflows:
   build_test_develop:
     jobs:
+      - maven-publish:
+          <<: *always-deploy-filter
+          context:
+            - ci-h10-pzn-maven-read
+          name: Maven Publish Helper API
       - gradle-build-test:
           <<: *always-deploy-filter
           context:
@@ -85,4 +100,5 @@ workflows:
             - ci-h10-pzn-maven-read
           name: Gradle Publish API
           requires:
+            - Maven Publish Helper API
             - Gradle Build and Test
