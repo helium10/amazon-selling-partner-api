@@ -88,11 +88,11 @@ jobs:
 workflows:
   build_test_develop:
     jobs:
-      - maven-publish-helper:
-          <<: *always-deploy-filter
-          context:
-            - ci-h10-pzn-maven-read
-          name: Maven Publish Helper API
+#      - maven-publish-helper:
+#          <<: *always-deploy-filter
+#          context:
+#            - ci-h10-pzn-maven-read
+#          name: Maven Publish Helper API
       - gradle-build-test:
           <<: *always-deploy-filter
           context:
