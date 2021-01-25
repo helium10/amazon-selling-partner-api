@@ -59,7 +59,7 @@ jobs:
                 command: |
                   for dir in ./build/swagger*/
                   do
-                    cd build/$dir
+                    cd $dir
                     chmod a+x ./gradlew
                     ./gradlew publishToMaven --stacktrace
                     cd ../..
