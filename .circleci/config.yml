@@ -43,7 +43,7 @@ jobs:
           root: ./
           paths:
             - 'build/*'
-      - jira/notify
+#      - jira/notify
   gradle-publish-api:
     docker:
       - image: cimg/openjdk:11.0
