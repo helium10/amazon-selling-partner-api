@@ -25,8 +25,9 @@ jobs:
       - checkout
       - maven/with_cache:
           app_src_directory: clients/sellingpartner-api-aa-java
+          settings_file: clients/sellingpartner-api-aa-java/settings.xml
           steps:
-            - run: mvn --settings settings.xml clean deploy -Dversion=1.0 -DMETAMUSE_MAVEN_PUBLISH_SECRET_KEY=$ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY -DMETAMUSE_MAVEN_PUBLISH_ACCESS_KEY=ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY
+            - run: mvn clean deploy -Dversion=1.0 -DMETAMUSE_MAVEN_PUBLISH_SECRET_KEY=$ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY -DMETAMUSE_MAVEN_PUBLISH_ACCESS_KEY=ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY
   gradle-build-test:
     docker:
       - image: cimg/openjdk:11.0
