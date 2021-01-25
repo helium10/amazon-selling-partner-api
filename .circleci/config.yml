@@ -70,7 +70,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths:
-            - '*/build/*'
+            - 'build/*'
 workflows:
   build_test_develop:
     jobs:
