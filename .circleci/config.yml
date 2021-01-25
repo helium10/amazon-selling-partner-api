@@ -18,6 +18,14 @@ orbs:
   h10-slack: helium10/h10-slack@0.1.18
   h10-kubernetes: helium10/h10-kubernetes@0.0.20
 jobs:
+  maven-publish-helper:
+    executor:
+      name: maven/default
+    steps:
+      - checkout
+      - maven/with_cache:
+          steps:
+            - run: mvn --settings settings.xml clean deploy -Dversion=1.0 -DMETAMUSE_MAVEN_PUBLISH_SECRET_KEY=$ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY -DMETAMUSE_MAVEN_PUBLISH_ACCESS_KEY=ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY
   gradle-build-test:
     docker:
       - image: cimg/openjdk:11.0
@@ -72,15 +80,6 @@ jobs:
           root: ./
           paths:
             - 'build/*'
-  maven-publish-helper:
-    executor:
-      name: maven/default
-    name: "Publish Maven Libraries"
-    steps:
-      - checkout
-      - maven/with_cache:
-          steps:
-            - run: mvn --settings settings.xml clean deploy -Dversion=1.0 -DMETAMUSE_MAVEN_PUBLISH_SECRET_KEY=$ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY -DMETAMUSE_MAVEN_PUBLISH_ACCESS_KEY=ORG_GRADLE_PROJECT_METAMUSE_MAVEN_PUBLISH_SECRET_KEY
 workflows:
   build_test_develop:
     jobs:
