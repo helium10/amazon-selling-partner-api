@@ -75,7 +75,7 @@ jobs:
                   do
                     cd $dir
                     chmod a+x ./gradlew
-                    ./gradlew publishToMaven --stacktrace
+                    ./gradlew publish --stacktrace
                     cd ../..
                   done
                 name: Publish APIs to Maven

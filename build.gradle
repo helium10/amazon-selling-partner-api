@@ -46,12 +46,15 @@ swaggerSources {
   ].forEach { dir, modelFile ->
     "${modelFile.replaceAll('_', '').replaceAll('-', '')}" {
       inputFile = file("./models/${dir}-api-model/${modelFile}.json")
-
       code {
         language = 'java'
         templateDir = file('./clients/sellingpartner-api-aa-java/resources/swagger-codegen/templates')
         additionalProperties = globalProperties + [
-          "artifactId": "authorization"
+          "artifactId": "authorization",
+          "modelPackage": "com.helium10.spapi.${dir.replaceAll('-', '')}.model",
+          "apiPackage": "com.helium10.spapi.${dir.replaceAll('-', '')}.api",
+          "invokerPackage": "com.helium10.spapi.${dir.replaceAll('-', '')}"
+
         ]
       }
     }
