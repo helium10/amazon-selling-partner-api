@@ -15,7 +15,8 @@ version = '1.0.1'
 
 def globalProperties = [
   "groupId": "com.helium10.amazon-selling-partner-api",
-  "artifactVersion": project.version
+  "artifactVersion": project.version,
+  "hideGenerationTimestamp": true
 ]
 
 swaggerSources {
