@@ -10,7 +10,7 @@
     <distributionManagement>
         <repository>
             <id>maven.metamu.se</id>
-            <url>s3://maven.metamu.se/releases</url>
+            <url>s3://maven.metamu.se.s3-us-west-2.amazonaws.com/releases</url>
         </repository>
     </distributionManagement>
     <build>
