@@ -1,0 +1,58 @@
+plugins {
+  id 'java'
+  id 'org.hidetake.swagger.generator' version '2.18.2'
+}
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  swaggerCodegen 'io.swagger.codegen.v3:swagger-codegen-cli:3.0.24'
+}
+
+version = '1.0.1'
+
+def globalProperties = [
+  "groupId": "com.helium10.amazon-selling-partner-api",
+  "artifactVersion": project.version
+]
+
+swaggerSources {
+  [
+    authorization: 'authorization',
+    'catalog-items': 'catalogItemsV0',
+    'fba-inbound-eligibility': 'fbaInbound',
+    'fba-inventory': 'fbaInventory',
+    'fba-small-and-light': 'fbaSmallandLight',
+    'feeds': 'feeds_2020-09-04',
+    'finances': 'financesV0',
+    'fulfillment-inbound': 'fulfillmentInboundV0',
+    'fulfillment-outbound': 'fulfillmentOutbound_2020-07-01',
+    'merchant-fulfillment': 'merchantFulfillmentV0',
+    messaging: 'messaging',
+    notifications: 'notifications',
+    orders: 'ordersV0',
+    'product-fees': 'productFeesV0',
+    'product-pricing': 'productPricingV0',
+    'reports': 'reports_2020-09-04',
+    'sales': 'sales',
+    'sellers': 'sellers',
+    'services': 'services',
+    'shipping': 'shipping',
+    'solicitations': 'solicitations',
+    'uploads': 'uploads_2020-11-01',
+  ].forEach { dir, modelFile ->
+    "${modelFile.replaceAll('_', '').replaceAll('-', '')}" {
+      inputFile = file("./models/${dir}-api-model/${modelFile}.json")
+
+      code {
+        language = 'java'
+        templateDir = file('./clients/sellingpartner-api-aa-java/resources/swagger-codegen/templates')
+        additionalProperties = globalProperties + [
+          "artifactId": "authorization"
+        ]
+      }
+    }
+  }
+}

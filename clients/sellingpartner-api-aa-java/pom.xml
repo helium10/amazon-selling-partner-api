@@ -7,7 +7,20 @@
     <artifactId>sellingpartnerapi-aa-java</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
+    <distributionManagement>
+        <repository>
+            <id>maven.metamu.se</id>
+            <url>s3://maven.metamu.se/snapshots/</url>
+        </repository>
+    </distributionManagement>
     <build>
+        <extensions>
+            <extension>
+                <groupId>com.allogy.maven.wagon</groupId>
+                <artifactId>maven-s3-wagon</artifactId>
+                <version>1.2.0</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

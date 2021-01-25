@@ -1,0 +1,90 @@
+version: 2.1
+always-deploy-branch-filter: &always-deploy-filter
+  filters:
+    branches:
+      only: develop # I pulled PR off develop this can be set to whatever branch you want.
+
+manually-deploy-branch-filter: &manually-deploy-filter
+  filters:
+    branches:
+      ignore: develop # I pulled PR off develop this can be set to whatever branch you want.
+
+orbs:
+  jira: circleci/jira@1.3.0
+  gradle: circleci/gradle@2.2.0
+  h10-common-build: helium10/h10-common-build@0.0.24
+  h10-ecr-build: helium10/h10-ecr-build@0.1.18
+  h10-slack: helium10/h10-slack@0.1.18
+  h10-kubernetes: helium10/h10-kubernetes@0.0.20
+jobs:
+  gradle-build-test:
+    docker:
+      - image: cimg/openjdk:11.0
+    resource_class: xlarge
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run:
+                cache_checksum_file: build.gradle
+                command: ./gradlew clean generateSwaggerCode --stacktrace
+                name: Build and test
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/junit
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - '*/build/*'
+      - jira/notify
+  gradle-publish-api:
+    docker:
+      - image: cimg/openjdk:11.0
+    resource_class: xlarge
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - gradle/with_cache:
+          steps:
+            - run:
+                cache_checksum_file: build.gradle
+                command: |
+                  for dir in ./build/swagger*/
+                  do
+                    cd build/$dir
+                    chmod a+x ./gradlew
+                    ./gradlew publishToMaven --stacktrace
+                    cd ../..
+                  done
+                name: Publish APIs to Maven
+      - store_artifacts:
+          path:  build/*/build/libs/*.jar
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - '*/build/*'
+workflows:
+  build_test_develop:
+    jobs:
+      - gradle-build-test:
+          <<: *always-deploy-filter
+          context:
+            - ci-h10-pzn-maven-read
+          name: Gradle Build and Test
+          requires:
+            - Send Start Message
+      - gradle-publish-api:
+          <<: *always-deploy-filter
+          context:
+            - ci-h10-pzn-maven-read
+          name: Gradle Package API
+          requires:
+            - Gradle Build and Test
