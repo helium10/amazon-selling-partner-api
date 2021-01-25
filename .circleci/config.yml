@@ -79,12 +79,10 @@ workflows:
           context:
             - ci-h10-pzn-maven-read
           name: Gradle Build and Test
-          requires:
-            - Send Start Message
       - gradle-publish-api:
           <<: *always-deploy-filter
           context:
             - ci-h10-pzn-maven-read
-          name: Gradle Package API
+          name: Gradle Publish API
           requires:
             - Gradle Build and Test
