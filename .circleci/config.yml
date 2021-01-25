@@ -75,7 +75,7 @@ jobs:
                   do
                     cd $dir
                     chmod a+x ./gradlew
-                    ./gradlew publish --stacktrace
+                    ./gradlew --add-modules java.xml.bind '-Dorg.gradle.jvmargs=--add-modules java.xml.bind' publish --stacktrace
                     cd ../..
                   done
                 name: Publish APIs to Maven
