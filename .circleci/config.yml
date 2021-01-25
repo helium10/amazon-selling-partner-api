@@ -72,7 +72,7 @@ jobs:
           root: ./
           paths:
             - 'build/*'
-  maven-publish:
+  maven-publish-helper:
     executor:
       name: maven/default
     name: "Publish Maven Libraries"
@@ -84,7 +84,7 @@ jobs:
 workflows:
   build_test_develop:
     jobs:
-      - maven-publish:
+      - maven-publish-helper:
           <<: *always-deploy-filter
           context:
             - ci-h10-pzn-maven-read
